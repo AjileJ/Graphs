@@ -93,7 +93,7 @@ class Test(unittest.TestCase):
         self.graph.dft_recursive(1)
         output = sys.stdout.getvalue()
 
-        self.assertIn(output, dft)
+        self.assertIn(output,dft)
 
         sys.stdout = stdout_  # Restore stdout
 
