@@ -103,9 +103,9 @@ class Graph:
         This should be done using recursion.
         
         """
-       
+ 
         visited.add(starting_vertex)
-        
+        print(starting_vertex)
         edges = self.get_neighbors(starting_vertex)
         
         if len(edges) == 0:
@@ -116,6 +116,7 @@ class Graph:
                     self.dft_recursive(edge, visited)
                 else:
                     return 
+              
          
                     
                     
@@ -145,7 +146,7 @@ class Graph:
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
-        breath-first order.
+        breadth-first order.
         """
         # make a queue
         queue = Queue()
@@ -213,24 +214,26 @@ class Graph:
                         path_copy.append(edge)
                         stack.push(path_copy)
 
-    def dfs_recursive(self, starting_vertex, destination_vertex, visited= set(), path=[]):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
-
-        This should be done using recursion.
-        """
-        visited.add(starting_vertex)
-        path = path + [starting_vertex]
-        if starting_vertex == destination_vertex:
-            return path
-        for vert in self.vertices[starting_vertex]:
-            if vert not in visited:
-                new_path = self.dfs_recursive(vert, destination_vertex, visited, path)
-                if new_path:
-                    return new_path
-        return None        
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=set(), path=[]):               #dfs_recursive(1,6)         (2, 6, {1}, [1])        (3, 6, {1,2})
+            """
+            Return a list containing a path from
+            starting_vertex to destination_vertex in
+            depth-first order.
+            This should be done using recursion.
+            """
+            # pass  # TODO
+            visited.add(starting_vertex)                                                                    # {1}                      {1,2}                    {1,2,3}
+            path = path + [starting_vertex]                                                                 # path = [1]               [1, 2]                   [1,2,3]
+            if starting_vertex == destination_vertex:                                                       # 1 == 6 / False           2 == 6 / False           3 == 6 / False
+                return path                                                                                 # [1,2,4,6]                
+            for vert in self.vertices[starting_vertex]:                                                     # self.vertices[1] = {2}   {3, 4}                   {5}
+                if vert not in visited:                                                                     # 2 not in [1] / True       3 not in [1, 2] /True   5 not in [1,2, 3]
+                    
+                    final_path = self.dfs_recursive(vert, destination_vertex, visited, path)
+                    if final_path:                                                                          # [1,2,4,6]
+                        return final_path
+            else:
+                return None        
             
 
 if __name__ == '__main__':
@@ -253,6 +256,7 @@ if __name__ == '__main__':
     graph.add_edge(3, 5)
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
+    
 
     '''
     Should print:
