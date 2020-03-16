@@ -22,13 +22,18 @@ class Graph:
         Add a directed edge to the graph.
         """
         if v1 in self.vertices and v2 in self.vertices:
-           self.vertices[v1].add(v2)    
+           self.vertices[v1].add(v2)
+        else:
+            print("error: vertex does not exist")       
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        return self.vertices[vertex_id]
+        if vertex_id in self.vertices:
+            return self.vertices[vertex_id]
+        else:
+            print('Error getting neighbors')
 
     def bft(self, starting_vertex):
         """
