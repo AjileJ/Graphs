@@ -1,3 +1,17 @@
+import random
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
 class User:
     def __init__(self, name):
         self.name = name
@@ -43,11 +57,26 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
+        
 
         # Add users
+        for i in range(0,num_users):
+            self.add_user(f"User: {1}")
 
+        possible_friendships = []
         # Create friendships
-
+        for UserID in self.users:
+            for friendID in range(UserID + 1, self.last_id + 1):
+                possible_friendships.append((UserID, friendID))
+        random.shuffle(possible_friendships)
+        
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+                    
+            
+        
+        
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -59,12 +88,36 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        queue = Queue()
+        queue.enqueue([user_id])
+        
+        while queue.size() > 0:
+            path = queue.dequeue()
+            vertex = path[-1]
+            
+            if vertex not in visited:
+                visited[vertex] = path
+                
+                for neighbor in self.friendships[vertex]:
+                    path_copy = path.copy()
+                    path_copy.append(neighbor)
+                    queue.enqueue(path_copy)
+        
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    sg.populate_graph(50, 3)
+    print('Friendships')
     print(sg.friendships)
+    print('Connections')
     connections = sg.get_all_social_paths(1)
     print(connections)
+    print(f'User in extended social network: {len(connections)}')
+    
+    total_social_paths = 0
+    for user_id in connections:
+        total_social_paths += len(connections[user_id])
+    
+    print(f'Avg length of social path: {total_social_paths/len(connections)}')
