@@ -62,6 +62,24 @@ class Graph:
                 for edge in edges:
                     ## put them in line to be visited
                     queue.enqueue(edge)
+                    
+                    
+    # def dft(self, starting):
+    #     s = Stack()
+    #     vis = set()
+    #     s.push(starting)
+    #     while s.size() > 0:
+    #         current = s.pop()
+    #         if current not in vis:
+    #             vis.add(current)
+    #             print(current)
+    #             ed = self.get_neighbors(current)
+    #             for e in ed:
+    #                 s.push(e)
+                
+            
+            
+                             
             
             
             
@@ -95,7 +113,7 @@ class Graph:
                     stack.push(edge)
         
 
-    def dft_recursive(self, starting_vertex, visited=set()):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -103,10 +121,12 @@ class Graph:
         This should be done using recursion.
         
         """
- 
-        visited.add(starting_vertex)
-        print(starting_vertex)
-        edges = self.get_neighbors(starting_vertex)
+        if visited is None:
+            visited = set()
+        if starting_vertex not in visited:
+            visited.add(starting_vertex)
+            print(starting_vertex)
+            edges = self.get_neighbors(starting_vertex)
         
         if len(edges) == 0:
             return
@@ -214,21 +234,24 @@ class Graph:
                         path_copy.append(edge)
                         stack.push(path_copy)
 
-    def dfs_recursive(self, starting_vertex, destination_vertex, visited=set(), path=[]):               #dfs_recursive(1,6)         (2, 6, {1}, [1])        (3, 6, {1,2})
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):               #dfs_recursive(1,6)         (2, 6, {1}, [1])        (3, 6, {1,2})
             """
             Return a list containing a path from
             starting_vertex to destination_vertex in
             depth-first order.
             This should be done using recursion.
             """
-            # pass  # TODO
-            visited.add(starting_vertex)                                                                    # {1}                      {1,2}                    {1,2,3}
-            path = path + [starting_vertex]                                                                 # path = [1]               [1, 2]                   [1,2,3]
-            if starting_vertex == destination_vertex:                                                       # 1 == 6 / False           2 == 6 / False           3 == 6 / False
-                return path                                                                                 # [1,2,4,6]                
-            for vert in self.vertices[starting_vertex]:                                                     # self.vertices[1] = {2}   {3, 4}                   {5}
-                if vert not in visited:                                                                     # 2 not in [1] / True       3 not in [1, 2] /True   5 not in [1,2, 3]
-                    
+            
+            if visited is None:
+                visited = set()
+            if path is None:
+                path = []    
+            visited.add(starting_vertex)                                                          # {1}                      {1,2}                    {1,2,3}
+            path = path + [starting_vertex]                                                       # path = [1]               [1, 2]                   [1,2,3]
+            if starting_vertex == destination_vertex:                                             # 1 == 6 / False           2 == 6 / False           3 == 6 / False
+                return path                                                                       # [1,2,4,6]                
+            for vert in self.vertices[starting_vertex]:                                           # self.vertices[1] = {2}   {3, 4}                   {5}
+                if vert not in visited:                                                           # 2 not in [1] / True       3 not in [1, 2] /True   5 not in [1,2, 3]
                     final_path = self.dfs_recursive(vert, destination_vertex, visited, path)
                     if final_path:                                                                          # [1,2,4,6]
                         return final_path
