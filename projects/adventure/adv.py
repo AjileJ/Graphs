@@ -12,11 +12,11 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -29,20 +29,20 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 
-traversal_path = []
+traversal_path = []  #n , n
 stack = Stack()
 
-visited = set()
+visited = set()  #v = 0, 1 , 2
 stack.push(0)
 
 while len(visited) < len(room_graph): # true keep going  set() < 9 
-    current_room = stack.stack[-1]  # current_room = 0, 1
+    current_room = stack.stack[-1]  # current_room = 0, 1, 2
     print('current room',stack.stack[-1])
     visited.add(current_room)  # visited = set(0,1)
     print('visited1', visited)
-    neighbors = room_graph[current_room][1] # neighbors = {n:1}// {s:0, n:2}//
+    neighbors = room_graph[current_room][1] # neighbors = {n:1}// {s:0, n:2}// {s:1}
     print('neighbors',room_graph[current_room][1])
-    not_visited = []  # [1,n// 2,n]
+    not_visited = []  # [1,n ] [0:s, 2: n]  []
     for direction, room_id in neighbors.items():  
         print('neighbors dict',neighbors.items())
         print('neighbors room id', room_id)
@@ -58,13 +58,15 @@ while len(visited) < len(room_graph): # true keep going  set() < 9
         print('visited2', visited)          
         # now we put last number in stack as current_room
     else:
+        print('stack before pop',stack.stack)
+        stack.pop()
         for direction, room_id in neighbors.items():
-            if room_id == stack.stack[-1]:
+            if room_id == stack.stack[-1]: # if neighbors id is == last item in stack, append the direction
+                print('dirdir', direction)
                 print('stack ' ,stack.stack)
                 print('last in stack', stack.stack[-1])
                 traversal_path.append(direction)
-                print('traversal path', traversal_path)
-                print('end', direction)    
+                print('traversal path', traversal_path)   
                 print('visited3', visited)        
         
 # TRAVERSAL TEST
